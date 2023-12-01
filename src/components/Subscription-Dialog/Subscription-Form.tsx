@@ -48,12 +48,6 @@ const SubscriptionForm = () => {
     reset()
   }
 
-  const encode = (data: FormInputs) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-      .join("&")
-  }
-
   return (
     <form method="post" name="subscriptions" onSubmit={handleSubmit(onSubmit)} data-netlify="true" data-netlify-honeypot="bot-field" className='flex flex-col gap-2'>
       <input type="hidden" name="form-name" value="subscriptions" />
