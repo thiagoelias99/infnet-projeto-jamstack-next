@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className='w-screen min-h-screen m-auto flex flex-col justify-between overflow-hidden'>
+      <body className='w-screen min-h-screen m-auto flex flex-col justify-between overflow-x-hidden'>
         <Header />
         {children}
         <Footer />
