@@ -12,13 +12,11 @@ export default function Logo() {
         <Image
           src={logo1}
           alt='logo'
-          objectFit='contain'
           placeholder='empty'
         />
         <Image
           src={logo2}
           alt='logo'
-          objectFit='contain'
           placeholder='empty'
         />
       </div>
