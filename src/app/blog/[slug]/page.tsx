@@ -1,6 +1,5 @@
-import { format, parseISO } from 'date-fns';
 import { allPosts } from 'contentlayer/generated';
-import { getMDXComponent, useMDXComponent } from 'next-contentlayer/hooks';
+import { useMDXComponent } from 'next-contentlayer/hooks';
 import { MDXComponents } from 'mdx/types';
 
 const MyH1 = (props: React.HTMLProps<HTMLHeadingElement>) => (
@@ -59,18 +58,13 @@ const mdxComponents: MDXComponents = {
 export const generateStaticParams = async () =>
     allPosts.map((post) => ({ slug: post._raw.flattenedPath }));
 
-export const generateMetadata = ({ params }) => {
-    console.log(params)
+export const generateMetadata = ({ params }: { params: { slug: string } }) => {
     const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
     return { title: post?.title || "" };
 };
 
 const PostLayout = ({ params }: { params: { slug: string } }) => {
     const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-
-    console.log(post);
-
-    // const Content = getMDXComponent(post?.body.code);
     const MDXContent = useMDXComponent(post?.body.code || "");
 
     return (
