@@ -1,6 +1,6 @@
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { allPosts, Post } from 'contentlayer/generated';
+import { allPosts } from 'contentlayer/generated';
 
 import Image from 'next/image'
 
@@ -19,8 +19,7 @@ export default function Home() {
   }
 
   function formatDate(date: string) {
-    // return moment(date).locale('pt-Br').format("DD MMMM YYYY")
-    return moment(date).locale('pt-br').add(1,"day").format("MMMM DD, YYYY")
+    return moment(date).locale('pt-br').add(1, "day").format("MMMM DD, YYYY")
   }
 
   return (
