@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { allPosts } from 'contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { MDXComponents } from 'mdx/types';
@@ -68,13 +69,19 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
     const MDXContent = useMDXComponent(post?.body.code || "");
 
     return (
-        <article className="py-8 mx-auto max-w-xl">
-            <div className="mb-8 text-center">
-                <h1>{post?.title}</h1>
+        <main>
+            <div className='mt-16 w-full h-[300px] md:h-[400px] lg:h-[500px] relative'>
+                <Image
+                    src={post?.hero_image || ''}
+                    alt={''}
+                    fill={true}
+                    className='object-cover'
+                />
             </div>
-            {/* <Content /> */}
-            <MDXContent components={mdxComponents} />
-        </article>
+            <article className="w-screen max-w-[1024px] m-auto p-4">
+                <MDXContent components={mdxComponents} />
+            </article>
+        </main>
     );
 };
 
