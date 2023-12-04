@@ -1,5 +1,6 @@
 import NextLink from 'next/link'
 import React from 'react'
+import SignDialog from '../Sign-Dialog'
 
 interface StyledLinkProps {
     text: React.ReactNode
@@ -19,6 +20,7 @@ export default function Links() {
         <nav className='flex flex-row gap-4 h-full justify-center items-center'>
             <StyledLink text='Home' to='/' />
             <StyledLink text='Blog' to='/blog' />
+            <SignDialog />
         </nav>
     )
 }

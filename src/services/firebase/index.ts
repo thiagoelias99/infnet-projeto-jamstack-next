@@ -48,8 +48,18 @@ async function signUp(email: string, password: string, name: string | null = nul
             console.log(errorCode, errorMessage)
             message = errorMessage
         })
+
+            //Create token
+    if (user) {
+        const token = signToken(user.uid)
+        return {
+            token,
+            message
+        }
+    }
+
     return {
-        user: user?.uid || null,
+        token: null,
         message
     }
 }
