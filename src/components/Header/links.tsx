@@ -1,5 +1,6 @@
 import NextLink from 'next/link'
 import React from 'react'
+import SignDialog from '../Sign-Dialog'
 
 interface StyledLinkProps {
     text: React.ReactNode

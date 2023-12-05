@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,22 +10,31 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-interface SimpleAlertDialogueProps {
+interface ConfirmationAlertDialogProps {
     open: boolean
     setOpen: (open: boolean) => void
     message: string
+    confirmText?: string,
     confirmAction?: () => void
+    cancelText?: string,
+    cancelAction?: () => void
 }
 
-const SimpleAlertDialogue = ({ message, open, setOpen, confirmAction }: SimpleAlertDialogueProps) => {
-    function handleButton() {
-        setOpen(false)
+const ConfirmationAlertDialog = ({ message, open, setOpen, confirmText = 'Confirmar', cancelAction, cancelText = 'Cancelar', confirmAction }: ConfirmationAlertDialogProps) => {
 
+    function handleCancel() {
+        setOpen(false)
+        if (cancelAction) {
+            cancelAction()
+        }
+    }
+
+    function handleConfirm() {
+        setOpen(false)
         if (confirmAction) {
             confirmAction()
         }
     }
-
 
     return (
         <AlertDialog open={open}>
@@ -36,7 +43,8 @@ const SimpleAlertDialogue = ({ message, open, setOpen, confirmAction }: SimpleAl
                     <AlertDialogTitle>{message}</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogAction onClick={handleButton}>Continuar</AlertDialogAction>
+                    <AlertDialogCancel onClick={handleCancel}>{cancelText}</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleConfirm}>{confirmText}</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -44,4 +52,4 @@ const SimpleAlertDialogue = ({ message, open, setOpen, confirmAction }: SimpleAl
     )
 }
 
-export default SimpleAlertDialogue
+export default ConfirmationAlertDialog

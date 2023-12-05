@@ -16,27 +16,17 @@ interface SimpleAlertDialogueProps {
     open: boolean
     setOpen: (open: boolean) => void
     message: string
-    confirmAction?: () => void
 }
 
-const SimpleAlertDialogue = ({ message, open, setOpen, confirmAction }: SimpleAlertDialogueProps) => {
-    function handleButton() {
-        setOpen(false)
-
-        if (confirmAction) {
-            confirmAction()
-        }
-    }
-
-
+const SimpleErrorAlertDialog = ({ message, open, setOpen }: SimpleAlertDialogueProps) => {
     return (
         <AlertDialog open={open}>
-            <AlertDialogContent>
+            <AlertDialogContent className='border-red-600 border-2'>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{message}</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogAction onClick={handleButton}>Continuar</AlertDialogAction>
+                    <AlertDialogAction className='bg-red-600' onClick={e => setOpen(false)}>Continuar</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
@@ -44,4 +34,4 @@ const SimpleAlertDialogue = ({ message, open, setOpen, confirmAction }: SimpleAl
     )
 }
 
-export default SimpleAlertDialogue
+export default SimpleErrorAlertDialog
