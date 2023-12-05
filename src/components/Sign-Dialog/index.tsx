@@ -7,27 +7,37 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose
 } from "@/components/ui/dialog"
 
-import React from 'react'
-import { Button } from "../ui/button"
+import { useState } from 'react'
 import SignInForm from './Sign-In-Form'
 import SignUpForm from './Sign-Up-Form'
 
-const SignDialog = () => {
+interface SignDialogProps {
+    loginFunction?: (user: string) => void
+}
 
-    const [showSignUp, setShowSignUp] = React.useState(false)
+const SignDialog = ({ loginFunction }: SignDialogProps) => {
+
+    const [showSignUp, setShowSignUp] = useState(false)
+    const [open, setOpen] = useState(false)
 
     return (
-        <Dialog>
-            <DialogTrigger asChild className="w-full md:w-1/3 order-1 md:order-2">
-                <Button variant="outline" className="w-full md:w-auto">Entrar</Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger className="w-full md:w-1/3" >
+                <p
+                    className="w-full md:w-auto text-white text-base md:text-xl text-end underline cursor-pointer"
+                    onClick={() => setOpen(true)}
+                >
+                    Entre
+                </p>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Entre para interagir</DialogTitle>
                 </DialogHeader>
-                {showSignUp ? <SignUpForm /> : <SignInForm />}
+                {showSignUp ? <SignUpForm /> : <SignInForm buttonAction={() => setOpen(false)} loginFunction={loginFunction} />}
                 {showSignUp ?
                     <p className='text-center'>Já possui conta? <span onClick={() => setShowSignUp(false)} className='cursor-pointer font-bold'>Entre</span></p>
                     :

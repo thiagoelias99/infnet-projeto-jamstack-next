@@ -1,5 +1,6 @@
 import Logo from './logo'
 import Links from './links'
+import Login from './Login'
 
 export default function Header() {
     return (
@@ -7,6 +8,7 @@ export default function Header() {
             <div className='flex flex-col md:flex-row w-full h-full justify-between items-center md:items-end max-w-[1024px] mx-auto'>
                 <Logo />
                 <Links />
+                <Login />
             </div>
         </header>
     )

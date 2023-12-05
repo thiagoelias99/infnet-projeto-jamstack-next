@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import moment from 'moment'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -11,13 +10,16 @@ import { Button } from '@/components/ui/button'
 
 import ErrorMessage from '@/components/Error-Message'
 import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
-import CheckboxWithLabel from '@/components/Forms/Fields/Checkbox-With-Label'
 
 import { signIn } from '@/services/firebase'
-import { sign } from 'crypto'
 import SimpleErrorAlertDialog from '../Alert-Dialogs/Simple-Error-Alert-Dialog'
 
-const SignInForm = () => {
+interface SignInFormProps {
+    buttonAction?: () => void
+    loginFunction?: (user: string) => void
+}
+
+const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
     //Alert Dialog
     const [showAlert, setShowAlert] = React.useState(false)
     const [showErrorAlert, setShowErrorAlert] = React.useState(false)
@@ -44,14 +46,27 @@ const SignInForm = () => {
         const token = await signIn(data.email, data.password)
 
         if (token) {
-            console.log(token)
             setShowAlert(true)
+
+            localStorage.setItem('token', token)
+
+            if (loginFunction) {
+                loginFunction(token)
+            }
         } else {
             console.log('error')
             setShowErrorAlert(true)
-        }   
+        }
 
         reset()
+    }
+
+    function confirmAction() {
+        if (buttonAction) {
+            buttonAction()
+        }
+
+
     }
 
     return (
@@ -66,7 +81,7 @@ const SignInForm = () => {
 
             <Button variant="default" type="submit">Entrar</Button>
 
-            <SimpleAlertDialogue message="Login feito com sucesso!" open={showAlert} setOpen={setShowAlert} />
+            <SimpleAlertDialogue message="Login feito com sucesso!" open={showAlert} setOpen={setShowAlert} confirmAction={confirmAction}/>
             <SimpleErrorAlertDialog message="Erro ao fazer login!" open={showErrorAlert} setOpen={setShowErrorAlert} />
         </form>
     )

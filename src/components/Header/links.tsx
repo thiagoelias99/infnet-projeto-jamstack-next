@@ -20,7 +20,6 @@ export default function Links() {
         <nav className='flex flex-row gap-4 h-full justify-center items-center'>
             <StyledLink text='Home' to='/' />
             <StyledLink text='Blog' to='/blog' />
-            <SignDialog />
         </nav>
     )
 }

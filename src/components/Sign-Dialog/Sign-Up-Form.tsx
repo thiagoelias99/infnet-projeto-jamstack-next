@@ -55,6 +55,8 @@ const SignUpForm = () => {
         if (response.token) {
             setAlertMessage('Cadastro realizado com sucesso')
             console.log(response.token)
+
+            localStorage.setItem('token', response.token)
             setShowAlert(true)
         } else {
             setAlertMessage('Erro ao cadastrar')
