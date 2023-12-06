@@ -14,7 +14,12 @@ import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
 import { signUp } from '@/services/firebase'
 import SimpleErrorAlertDialog from '../Alert-Dialogs/Simple-Error-Alert-Dialog'
 
-const SignUpForm = () => {
+interface SignUpFormProps {
+    buttonAction?: () => void
+    loginFunction?: (user: string) => void
+}
+
+const SignUpForm = ({buttonAction, loginFunction} : SignUpFormProps) => {
     //Alert Dialog
     const [showAlert, setShowAlert] = React.useState(false)
     const [showErrorAlert, setShowErrorAlert] = React.useState(false)
@@ -47,11 +52,15 @@ const SignUpForm = () => {
             return
         }
 
-        const response = await signUp(data.email, data.password, data.name)
+        const user = await signUp(data.email, data.password, data.name)
 
-        if (response) {
+        if (user) {
             setAlertMessage('Cadastro realizado com sucesso')
-            // localStorage.setItem('token', response.token || '')
+            localStorage.setItem('token', user.token || '')
+
+            if (loginFunction) {
+                loginFunction(user.name)
+            }
             setShowAlert(true)
         } else {
             setAlertMessage('Erro ao cadastrar')
@@ -59,6 +68,12 @@ const SignUpForm = () => {
         }
 
         reset()
+    }
+
+    function confirmAction() {
+        if (buttonAction) {
+            buttonAction()
+        }
     }
 
     return (
@@ -78,7 +93,7 @@ const SignUpForm = () => {
 
             <Button variant="default" type="submit">Cadastrar</Button>
 
-            <SimpleAlertDialogue message={alertMessage} open={showAlert} setOpen={setShowAlert} />
+            <SimpleAlertDialogue message={alertMessage} open={showAlert} setOpen={setShowAlert} confirmAction={confirmAction} />
             <SimpleErrorAlertDialog message={alertMessage} open={showErrorAlert} setOpen={setShowErrorAlert} />
         </form>
     )

@@ -37,7 +37,7 @@ const SignDialog = ({ loginFunction }: SignDialogProps) => {
                 <DialogHeader>
                     <DialogTitle>Entre para interagir</DialogTitle>
                 </DialogHeader>
-                {showSignUp ? <SignUpForm /> : <SignInForm buttonAction={() => setOpen(false)} loginFunction={loginFunction} />}
+                {showSignUp ? <SignUpForm buttonAction={() => setOpen(false)} loginFunction={loginFunction} /> : <SignInForm buttonAction={() => setOpen(false)} loginFunction={loginFunction} />}
                 {showSignUp ?
                     <p className='text-center'>Já possui conta? <span onClick={() => setShowSignUp(false)} className='cursor-pointer font-bold'>Entre</span></p>
                     :

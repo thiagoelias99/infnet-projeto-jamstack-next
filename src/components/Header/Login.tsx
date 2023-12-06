@@ -15,7 +15,7 @@ const Login = () => {
         if (token) {
             validateUserByToken(token)
                 .then((user) => {
-                    setUser(user)
+                    setUser(user?.name || '')
                 })
         } else {
             setUser(null)
@@ -28,8 +28,6 @@ const Login = () => {
     }
 
     function loginUser(user: string | null) {
-        console.log('login')
-        console.log(user)
         setUser(user)
     }
 

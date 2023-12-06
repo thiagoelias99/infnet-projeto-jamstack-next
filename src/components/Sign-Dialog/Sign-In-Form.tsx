@@ -43,15 +43,15 @@ const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
     //Form submit handler
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
 
-        const token = await signIn(data.email, data.password)
+        const user = await signIn(data.email, data.password)
 
-        if (token) {
+        if (user) {
             setShowAlert(true)
 
-            localStorage.setItem('token', token)
+            localStorage.setItem('token', user.token || '')
 
             if (loginFunction) {
-                loginFunction(token)
+                loginFunction(user.name)
             }
         } else {
             console.log('error')
@@ -65,8 +65,6 @@ const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
         if (buttonAction) {
             buttonAction()
         }
-
-
     }
 
     return (
@@ -81,7 +79,7 @@ const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
 
             <Button variant="default" type="submit">Entrar</Button>
 
-            <SimpleAlertDialogue message="Login feito com sucesso!" open={showAlert} setOpen={setShowAlert} confirmAction={confirmAction}/>
+            <SimpleAlertDialogue message="Login feito com sucesso!" open={showAlert} setOpen={setShowAlert} confirmAction={confirmAction} />
             <SimpleErrorAlertDialog message="Erro ao fazer login!" open={showErrorAlert} setOpen={setShowErrorAlert} />
         </form>
     )

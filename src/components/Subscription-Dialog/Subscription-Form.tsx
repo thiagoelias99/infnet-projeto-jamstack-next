@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import ErrorMessage from '@/components/Error-Message'
 import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
 import CheckboxWithLabel from '@/components/Forms/Fields/Checkbox-With-Label'
+import { subscribeEmail } from '@/services/firebase'
 
 const SubscriptionForm = () => {
   //Alert Dialog
@@ -42,8 +43,7 @@ const SubscriptionForm = () => {
   //Form submit handler
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
 
-    console.log('Form data:')
-    console.log(data)
+    subscribeEmail(data.firstName, data.email)
     setShowAlert(true)
     reset()
   }
