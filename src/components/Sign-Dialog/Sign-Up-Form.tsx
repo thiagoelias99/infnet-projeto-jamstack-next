@@ -1,8 +1,7 @@
 'use client'
 
 import React from 'react'
-import moment from 'moment'
-import { useForm, SubmitHandler, set } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
@@ -11,10 +10,8 @@ import { Button } from '@/components/ui/button'
 
 import ErrorMessage from '@/components/Error-Message'
 import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
-import CheckboxWithLabel from '@/components/Forms/Fields/Checkbox-With-Label'
 
-import { signIn, signUp } from '@/services/firebase'
-import { sign } from 'crypto'
+import { signUp } from '@/services/firebase'
 import SimpleErrorAlertDialog from '../Alert-Dialogs/Simple-Error-Alert-Dialog'
 
 const SignUpForm = () => {
@@ -52,16 +49,14 @@ const SignUpForm = () => {
 
         const response = await signUp(data.email, data.password, data.name)
 
-        if (response.token) {
+        if (response) {
             setAlertMessage('Cadastro realizado com sucesso')
-            console.log(response.token)
-
-            localStorage.setItem('token', response.token)
+            // localStorage.setItem('token', response.token || '')
             setShowAlert(true)
         } else {
             setAlertMessage('Erro ao cadastrar')
             setShowErrorAlert(true)
-        }   
+        }
 
         reset()
     }

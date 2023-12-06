@@ -1,5 +1,7 @@
 'use server'
 
+import { getFirestore, doc, setDoc } from "firebase/firestore"
+
 import { initializeApp } from "firebase/app"
 import {
     getAuth,
@@ -9,6 +11,7 @@ import {
     signOut
 } from "firebase/auth"
 import { signToken, verifyToken } from '../tokens'
+import { IUser } from '@/models/User'
 
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
@@ -21,11 +24,17 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-console.log('firebase app created')
+const firebaseApp = initializeApp(firebaseConfig)
+
+async function getInstance() {
+    return firebaseApp
+}
 
 // Sign up with email and password
 async function signUp(email: string, password: string, name: string | null = null) {
+    console.log('signUp', email, password, name)
+
+
     const auth = getAuth()
     let message = ''
     const user = await createUserWithEmailAndPassword(auth, email, password)
@@ -49,19 +58,21 @@ async function signUp(email: string, password: string, name: string | null = nul
             message = errorMessage
         })
 
-            //Create token
+    //Create token
     if (user) {
         const token = signToken(user.uid)
-        return {
-            token,
-            message
-        }
+
+        // Create user on Firestore
+        const createdUser = await createUser({
+            id: user.uid,
+            name: name || '',
+            email: email || '',
+            token
+        })
+        return createdUser
     }
 
-    return {
-        token: null,
-        message
-    }
+    return null
 }
 
 async function signIn(email: string, password: string) {
@@ -86,6 +97,7 @@ async function signIn(email: string, password: string) {
         const token = signToken(user.uid)
         return token
     }
+
     return null
 }
 
@@ -95,6 +107,23 @@ async function validateUserByToken(token: string) {
         return uid
     }
     return null
+}
+
+// Firestore
+const _db = getFirestore(firebaseApp)
+
+async function createUser(user: IUser) {
+    if (!user.id) {
+        return
+    }
+    const docRef = doc(_db, 'users', user.id)
+
+    await setDoc(docRef, {
+        name: user.name,
+        email: user.email
+    })
+
+    return user
 }
 
 export {
