@@ -1,6 +1,6 @@
 'use server'
 
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
+import { getFirestore, collection, addDoc, doc, setDoc, getDoc, FirestoreError } from "firebase/firestore"
 
 import { initializeApp } from "firebase/app"
 import {
@@ -25,6 +25,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig)
+const db = getFirestore(firebaseApp)
 
 // Sign up with email and password
 async function signUp(email: string, password: string, name: string | null = null) {
@@ -53,23 +54,18 @@ async function signUp(email: string, password: string, name: string | null = nul
             message = errorMessage
         })
 
-    console.log('1')
     //Create token
     if (user) {
-        console.log('user', user.uid)
         let createdUser: IUser | null | undefined = null
         try {
             const token = signToken(user.uid)
-            console.log('token', token)
 
-            // Create user on Firestore
-            createdUser = await createUser({
+            createdUser = {
                 id: user.uid,
                 name: name || '',
                 email: email || '',
                 token
-            })
-            console.log('createdUser', createdUser)
+            }
 
         } catch (error) {
             console.error('error', error)
@@ -101,16 +97,15 @@ async function signIn(email: string, password: string) {
     //Create token
     if (user?.uid) {
         const token = signToken(user.uid)
+        const name = user.displayName || ''
+        const email = user.email || ''
 
-        const userDb = await validateUserByToken(token)
-
-        if (!userDb) {
-            return null
+        const userDb: IUser = {
+            id: user.uid,
+            name,
+            email,
+            token
         }
-
-        userDb.token = token
-        userDb.id = user.uid
-
         return userDb
     }
 
@@ -118,31 +113,26 @@ async function signIn(email: string, password: string) {
 }
 
 // Firestore
-const _db = getFirestore(firebaseApp)
-
 async function createUser(user: IUser) {
-    const _db2 = getFirestore(firebaseApp)
-    console.log('createUser', user)
     if (!user.id) {
         return
     }
-    console.log('aqui 1')
     try {
-        console.log('user id', user.id)
-        const docRef = doc(_db2, 'users', user.id)
-        console.log('aqui 2')
+        const docRef = doc(db, 'users', user.id)
 
-        setDoc(docRef, {
+        await setDoc(docRef, {
             name: user.name,
             email: user.email,
             createdAt: new Date()
-        },
-        { merge: true })
-        console.log('aqui 3')
+        })
 
-
-    } catch(error) {
-        console.error('error', error)   
+    } catch (error) {
+        if (error instanceof FirestoreError) {
+            console.error('Firestore error code:', error.code)
+            console.error('Firestore error message:', error.message)
+        } else {
+            console.error('Unknown error:', error)
+        }
     }
     return user
 }
@@ -150,7 +140,7 @@ async function createUser(user: IUser) {
 async function validateUserByToken(token: string) {
     const uid = verifyToken(token)
     if (uid) {
-        const docRef = doc(_db, 'users', uid)
+        const docRef = doc(db, 'users', uid)
         const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
@@ -169,7 +159,7 @@ async function validateUserByToken(token: string) {
 }
 
 async function subscribeEmail(name: string, email: string) {
-    const docRef = doc(_db, 'subscribers', email)
+    const docRef = doc(db, 'subscribers', email)
 
     await setDoc(docRef, {
         name,
@@ -178,7 +168,6 @@ async function subscribeEmail(name: string, email: string) {
     })
 
     return true
-
 }
 
 export {

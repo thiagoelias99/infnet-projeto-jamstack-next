@@ -11,11 +11,12 @@ const Login = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token')
+        const userName = localStorage.getItem('user_name')
 
         if (token) {
             validateUserByToken(token)
                 .then((user) => {
-                    setUser(user?.name || '')
+                    setUser(userName)
                 })
         } else {
             setUser(null)
@@ -24,6 +25,7 @@ const Login = () => {
 
     function logoutUser() {
         localStorage.removeItem('token')
+        localStorage.removeItem('user_name')
         setUser(null)
     }
 

@@ -49,6 +49,7 @@ const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
             setShowAlert(true)
 
             localStorage.setItem('token', user.token || '')
+            localStorage.setItem('user_name', user.name || '')
 
             if (loginFunction) {
                 loginFunction(user.name)

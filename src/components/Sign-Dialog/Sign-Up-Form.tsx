@@ -57,6 +57,7 @@ const SignUpForm = ({buttonAction, loginFunction} : SignUpFormProps) => {
         if (user) {
             setAlertMessage('Cadastro realizado com sucesso')
             localStorage.setItem('token', user.token || '')
+            localStorage.setItem('user_name', user.name || '')
 
             if (loginFunction) {
                 loginFunction(user.name)
