@@ -12,6 +12,7 @@ import {
 } from "firebase/auth"
 import { signToken, verifyToken } from '../tokens'
 import { IUser } from '@/models/User'
+import { IComments } from '@/models/Comments'
 
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
@@ -133,9 +134,21 @@ async function subscribeEmail(name: string, email: string) {
     return true
 }
 
+async function getCommentsForPost(slug: string) {
+    const docRef = doc(db, 'comments', slug)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+        return docSnap.data().comments as IComments[]
+    } else {
+        return null
+    }
+}
+
 export {
     signUp,
     signIn,
     validateUserByToken,
-    subscribeEmail
+    subscribeEmail,
+    getCommentsForPost
 }

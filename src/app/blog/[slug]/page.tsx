@@ -1,47 +1,49 @@
-import Image from 'next/image';
-import { allPosts } from 'contentlayer/generated';
-import { useMDXComponent } from 'next-contentlayer/hooks';
-import { MDXComponents } from 'mdx/types';
+import Image from 'next/image'
+import { allPosts } from 'contentlayer/generated'
+import { useMDXComponent } from 'next-contentlayer/hooks'
+import { MDXComponents } from 'mdx/types'
+import { getCommentsForPost } from '@/services/firebase'
+import PostComment from '@/components/Comment'
 
 const MyH1 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h1
         className="text-black text-3xl md:text-4xl lg:text-5xl my-4 text-center max-w-full"
         {...props}
     />
-);
+)
 const MyH2 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h2
         className="text-black text-xl font-bold md:text-2xl lg:text-3xl mt-16 mb-4 p-4 text-center w-full bg-slate-100 rounded"
         {...props}
     />
-);
+)
 const MyH3 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h3 className="text-black text-xl mt-2 mb-4 font-bold" {...props} />
-);
+)
 const Myp = (props: React.HTMLProps<HTMLParagraphElement>) => (
     <p className="text-slate-600 text-base" {...props} />
-);
+)
 const MyUl = (props: React.HTMLProps<HTMLUListElement>) => (
     <ul className="text-black text-base list-disc px-8" {...props} />
-);
+)
 const MyLi = (props: React.HTMLProps<HTMLLIElement>) => (
     <li className="text-slate-600 text-base" {...props} />
-);
+)
 const MyStrong = (props: React.HTMLProps<HTMLSpanElement>) => (
     <span className="text-black font-semibold text-lg" {...props} />
-);
+)
 const MyImg = (props: React.HTMLProps<HTMLImageElement>) => (
     <img className="mx-auto mb-4 rounded-xl w-full lg:w-10/12" {...props} />
-);
+)
 const MyA = (props: React.HTMLProps<HTMLAnchorElement>) => (
     <a className="text-black text-base" {...props} />
-);
+)
 const MyBlockquote = (props: React.HTMLProps<HTMLQuoteElement>) => (
     <blockquote
         className="text-slate-900 px-8 py-10 md:py-16 m-auto text-lg md:text-xl lg:text-2xl font-bold text-justify w-full mb-[-40px] bg-slate-100 rounded shadow"
         {...props}
     />
-);
+)
 
 const mdxComponents: MDXComponents = {
     h1: MyH1,
@@ -54,19 +56,39 @@ const mdxComponents: MDXComponents = {
     img: MyImg,
     a: MyA,
     blockquote: MyBlockquote,
-};
+}
 
 export const generateStaticParams = async () =>
-    allPosts.map((post) => ({ slug: post._raw.flattenedPath }));
+    allPosts.map((post) => ({ slug: post._raw.flattenedPath }))
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-    const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-    return { title: post?.title || "" };
-};
+    const post = allPosts.find((post) => post._raw.flattenedPath === params.slug)
+    return { title: post?.title || "" }
+}
 
 const PostLayout = ({ params }: { params: { slug: string } }) => {
-    const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-    const MDXContent = useMDXComponent(post?.body.code || "");
+    const post = allPosts.find((post) => post._raw.flattenedPath === params.slug)
+    const MDXContent = useMDXComponent(post?.body.code || "")
+
+    async function getComments() {
+        const comments = await getCommentsForPost(post?.slug || '')
+
+        if (comments?.length === 0 || comments === null) return (
+            <div>
+                <p className='text-slate-600 text-lg'>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+            </div>
+        )
+
+        return (
+            <div>
+                {comments?.map(comment => {
+                    return (
+                        <PostComment key={comment.id} comment={comment} />
+                    )
+                })}
+            </div>
+        )
+    }
 
     return (
         <main>
@@ -81,8 +103,14 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
             <article className="w-screen max-w-[1024px] m-auto p-4">
                 <MDXContent components={mdxComponents} />
             </article>
+            <section>
+                <h2 className="text-black text-xl font-bold md:text-2xl lg:text-3xl mt-16 mb-4 p-4 text-center w-full bg-slate-100 rounded">Comentários</h2>
+                <div className='flex flex-col w-full p-4'>
+                    {getComments()}
+                </div>
+            </section>
         </main>
-    );
-};
+    )
+}
 
-export default PostLayout;
+export default PostLayout
