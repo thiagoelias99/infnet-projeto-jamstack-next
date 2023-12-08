@@ -112,52 +112,15 @@ async function signIn(email: string, password: string) {
     return null
 }
 
-// Firestore
-async function createUser(user: IUser) {
-    if (!user.id) {
-        return
-    }
-    try {
-        const docRef = doc(db, 'users', user.id)
-
-        await setDoc(docRef, {
-            name: user.name,
-            email: user.email,
-            createdAt: new Date()
-        })
-
-    } catch (error) {
-        if (error instanceof FirestoreError) {
-            console.error('Firestore error code:', error.code)
-            console.error('Firestore error message:', error.message)
-        } else {
-            console.error('Unknown error:', error)
-        }
-    }
-    return user
-}
-
 async function validateUserByToken(token: string) {
     const uid = verifyToken(token)
     if (uid) {
-        const docRef = doc(db, 'users', uid)
-        const docSnap = await getDoc(docRef)
-
-        if (docSnap.exists()) {
-            const user = docSnap.data()
-
-            const userNormalized: IUser = {
-                name: user.name,
-                email: user.email
-            }
-            return userNormalized
-        } else {
-            return null
-        }
+        return uid
     }
     return null
 }
 
+// Firestore
 async function subscribeEmail(name: string, email: string) {
     const docRef = doc(db, 'subscribers', email)
 

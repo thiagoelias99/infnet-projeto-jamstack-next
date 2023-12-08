@@ -35,7 +35,7 @@ const Login = () => {
 
     return (
         <div className='flex justify-center items-center h-full w-full md:w-auto'>
-            {user ? <Logout userName={user} logoutFunction={logoutUser}/> : <SignDialog loginFunction={loginUser}/>}
+            {user ? <Logout userName={user} logoutFunction={logoutUser} /> : <SignDialog loginFunction={loginUser} />}
         </div>
     )
 }
