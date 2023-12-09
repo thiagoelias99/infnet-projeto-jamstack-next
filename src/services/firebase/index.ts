@@ -145,10 +145,33 @@ async function getCommentsForPost(slug: string) {
     }
 }
 
+async function addCommentForPost(slug: string, comment: IComments) {
+    const docRef = doc(db, 'comments', slug)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+        const comments = docSnap.data().comments as IComments[]
+        comments.push(comment)
+
+        await setDoc(docRef, {
+            comments
+        })
+
+        return true
+    } else {
+        await setDoc(docRef, {
+            comments: [comment]
+        })
+
+        return true
+    }
+}
+
 export {
     signUp,
     signIn,
     validateUserByToken,
     subscribeEmail,
-    getCommentsForPost
+    getCommentsForPost,
+    addCommentForPost
 }

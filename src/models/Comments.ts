@@ -1,5 +1,5 @@
 export interface IComments {
-    id: number
+    id?: string
     content: string
     createdAt: string
     updatedAt?: string

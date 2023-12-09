@@ -4,6 +4,7 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { MDXComponents } from 'mdx/types'
 import { getCommentsForPost } from '@/services/firebase'
 import PostComment from '@/components/Comment'
+import CommentInput from '@/components/Comment/Comment-Input'
 
 const MyH1 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h1
@@ -103,10 +104,11 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
             <article className="w-screen max-w-[1024px] m-auto p-4">
                 <MDXContent components={mdxComponents} />
             </article>
-            <section>
+            <section className="w-screen max-w-[1024px] m-auto p-4">
                 <h2 className="text-black text-xl font-bold md:text-2xl lg:text-3xl mt-16 mb-4 p-4 text-center w-full bg-slate-100 rounded">Comentários</h2>
-                <div className='flex flex-col w-full p-4'>
+                <div className='flex flex-col w-full'>
                     {getComments()}
+                    <CommentInput slug={params.slug}/>
                 </div>
             </section>
         </main>
