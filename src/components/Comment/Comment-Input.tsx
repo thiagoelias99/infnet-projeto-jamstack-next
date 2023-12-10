@@ -6,17 +6,16 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from '../ui/button'
 import { useEffect, useState } from 'react'
-import { addCommentForPost, getCommentsForPost, validateUserByToken } from '@/services/firebase'
+import { addCommentForPost, validateUserByToken } from '@/services/firebase'
 import SimpleAlertDialogue from '../Alert-Dialogs/Simple-Alert-Dialog'
 import { IComments } from '@/models/Comments'
-import PostComment from '.'
 
 interface CommentInputProps {
     slug: string
 }
 
 const CommentInput = ({ slug }: CommentInputProps) => {
-    // const router = useRouter()
+    console.log('slug', slug)
 
     const [comment, setComment] = useState("")
     const [user, setUser] = useState<string | null>(null)
@@ -27,16 +26,21 @@ const CommentInput = ({ slug }: CommentInputProps) => {
         const token = localStorage.getItem('token')
         const userName = localStorage.getItem('user_name')
 
+        setUser(userName)
+
         if (token) {
             validateUserByToken(token)
                 .then((user) => {
                     setUserId(user || '')
                     setUser(userName)
                 })
+                .catch((error) => {
+                    setUser(null)
+                })
         } else {
             setUser(null)
         }
-    }, [user])
+    }, [])
 
 
     function handleButtonClick() {

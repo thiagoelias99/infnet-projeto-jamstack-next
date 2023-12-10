@@ -2,9 +2,8 @@ import Image from 'next/image'
 import { allPosts } from 'contentlayer/generated'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 import { MDXComponents } from 'mdx/types'
-import { getCommentsForPost } from '@/services/firebase'
-import PostComment from '@/components/Comment'
 import CommentInput from '@/components/Comment/Comment-Input'
+import Comments from '@/components/Comments'
 
 const MyH1 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h1
@@ -71,26 +70,6 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
     const post = allPosts.find((post) => post._raw.flattenedPath === params.slug)
     const MDXContent = useMDXComponent(post?.body.code || "")
 
-    async function getComments() {
-        const comments = await getCommentsForPost(post?.slug || '')
-
-        if (comments?.length === 0 || comments === null) return (
-            <div>
-                <p className='text-slate-600 text-lg'>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
-            </div>
-        )
-
-        return (
-            <div>
-                {comments?.map(comment => {
-                    return (
-                        <PostComment key={comment.id} comment={comment} />
-                    )
-                })}
-            </div>
-        )
-    }
-
     return (
         <main>
             <div className='mt-16 w-full h-[300px] md:h-[400px] lg:h-[500px] relative'>
@@ -107,8 +86,8 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
             <section className="w-screen max-w-[1024px] m-auto p-4">
                 <h2 className="text-black text-xl font-bold md:text-2xl lg:text-3xl mt-16 mb-4 p-4 text-center w-full bg-slate-100 rounded">Comentários</h2>
                 <div className='flex flex-col w-full'>
-                    {getComments()}
-                    <CommentInput slug={params.slug}/>
+                    <Comments slug={params.slug} />
+                    <CommentInput slug={params.slug} />
                 </div>
             </section>
         </main>
