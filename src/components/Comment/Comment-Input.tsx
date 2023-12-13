@@ -1,47 +1,28 @@
 'use client'
 import { v4 as uuidv4 } from "uuid"
-// import { useRouter } from 'next/router'
 
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from '../ui/button'
-import { useEffect, useState } from 'react'
-import { addCommentForPost, validateUserByToken } from '@/services/firebase'
+import { useState } from 'react'
+import { addCommentForPost } from '@/services/firebase'
 import SimpleAlertDialogue from '../Alert-Dialogs/Simple-Alert-Dialog'
 import { IComments } from '@/models/Comments'
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { loggedInUser, updateCommets } from "@/recoil/atom"
 
 interface CommentInputProps {
     slug: string
 }
 
 const CommentInput = ({ slug }: CommentInputProps) => {
-    console.log('slug', slug)
+
+    const loggedInUserValue = useRecoilValue(loggedInUser)
+    const updateComments = useRecoilValue(updateCommets)
+    const setUpdateComments = useSetRecoilState(updateCommets)
 
     const [comment, setComment] = useState("")
-    const [user, setUser] = useState<string | null>(null)
     const [showAlert, setShowAlert] = useState(false)
-    const [userId, setUserId] = useState("")
-
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        const userName = localStorage.getItem('user_name')
-
-        setUser(userName)
-
-        if (token) {
-            validateUserByToken(token)
-                .then((user) => {
-                    setUserId(user || '')
-                    setUser(userName)
-                })
-                .catch((error) => {
-                    setUser(null)
-                })
-        } else {
-            setUser(null)
-        }
-    }, [])
-
 
     function handleButtonClick() {
         if (comment === "") return
@@ -49,8 +30,8 @@ const CommentInput = ({ slug }: CommentInputProps) => {
         const commentData: IComments = {
             id: uuidv4(),
             content: comment,
-            userName: user || '',
-            userId,
+            userName: loggedInUserValue?.name || '',
+            userId: loggedInUserValue?.id || '',
             createdAt: new Date().toISOString()
         }
         addCommentForPost(slug, commentData)
@@ -60,16 +41,15 @@ const CommentInput = ({ slug }: CommentInputProps) => {
     }
 
     function refreshPage() {
-        // router.reload()
-        window.location.reload()
+        setUpdateComments(!updateComments)
     }
 
     return (
         <div className="grid w-full gap-1.5 mt-8">
-            {!user &&
+            {!loggedInUserValue &&
                 <h4 className='w-fall text-center font-bold'>Faça login para comentar</h4>
             }
-            {user &&
+            {loggedInUserValue &&
                 <>
                     <Label htmlFor="message">Inserir um comentário</Label>
                     <Textarea placeholder="Digite seu comentário aqui..." id="message" value={comment} onChange={e => setComment(e.target.value)} />

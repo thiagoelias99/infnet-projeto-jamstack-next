@@ -3,19 +3,18 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    DialogClose
 } from "@/components/ui/dialog"
 
 import { useState } from 'react'
 import SignInForm from './Sign-In-Form'
 import SignUpForm from './Sign-Up-Form'
+import { IUser } from "@/models/User"
 
 interface SignDialogProps {
-    loginFunction?: (user: string) => void
+    loginFunction?: (user: IUser) => void
 }
 
 const SignDialog = ({ loginFunction }: SignDialogProps) => {

@@ -13,16 +13,21 @@ import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
 
 import { signIn } from '@/services/firebase'
 import SimpleErrorAlertDialog from '../Alert-Dialogs/Simple-Error-Alert-Dialog'
+import { useSetRecoilState } from 'recoil'
+import { IUser } from '@/models/User'
+import { loggedInUser } from '@/recoil/atom'
 
 interface SignInFormProps {
     buttonAction?: () => void
-    loginFunction?: (user: string) => void
+    loginFunction?: (user: IUser) => void
 }
 
 const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
     //Alert Dialog
     const [showAlert, setShowAlert] = React.useState(false)
     const [showErrorAlert, setShowErrorAlert] = React.useState(false)
+
+    const setLoggedInUserValue = useSetRecoilState<IUser | null>(loggedInUser)
 
     //Type of form input data validation 
     const formValidationSchema = z.object({
@@ -50,12 +55,15 @@ const SignInForm = ({ buttonAction, loginFunction }: SignInFormProps) => {
 
             localStorage.setItem('token', user.token || '')
             localStorage.setItem('user_name', user.name || '')
+            localStorage.setItem('user_id', user.id || '')
+            setLoggedInUserValue(user)
 
             if (loginFunction) {
-                loginFunction(user.name)
+                loginFunction(user)
             }
         } else {
             console.log('error')
+            setLoggedInUserValue(null)
             setShowErrorAlert(true)
         }
 

@@ -13,10 +13,11 @@ import SimpleAlertDialogue from '@/components/Alert-Dialogs/Simple-Alert-Dialog'
 
 import { signUp } from '@/services/firebase'
 import SimpleErrorAlertDialog from '../Alert-Dialogs/Simple-Error-Alert-Dialog'
+import { IUser } from '@/models/User'
 
 interface SignUpFormProps {
     buttonAction?: () => void
-    loginFunction?: (user: string) => void
+    loginFunction?: (user: IUser) => void
 }
 
 const SignUpForm = ({buttonAction, loginFunction} : SignUpFormProps) => {
@@ -58,9 +59,10 @@ const SignUpForm = ({buttonAction, loginFunction} : SignUpFormProps) => {
             setAlertMessage('Cadastro realizado com sucesso')
             localStorage.setItem('token', user.token || '')
             localStorage.setItem('user_name', user.name || '')
+            localStorage.setItem('user_id', user.id || '')
 
             if (loginFunction) {
-                loginFunction(user.name)
+                loginFunction(user)
             }
             setShowAlert(true)
         } else {

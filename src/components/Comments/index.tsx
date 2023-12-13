@@ -4,6 +4,8 @@ import { IComments } from '@/models/Comments'
 import { useEffect, useState } from 'react'
 import PostComment from '../Comment'
 import { getCommentsForPost } from '@/services/firebase'
+import { useRecoilValue } from 'recoil'
+import { updateCommets } from '@/recoil/atom'
 
 interface CommentsProps {
     slug: string
@@ -12,6 +14,8 @@ interface CommentsProps {
 const Comments = ({ slug }: CommentsProps) => {
     const [comments, setComments] = useState<IComments[]>([])
 
+    const updateComments2 = useRecoilValue(updateCommets)
+
     useEffect(() => {
         getCommentsForPost(slug || '')
             .then(comments2 => {
@@ -19,7 +23,7 @@ const Comments = ({ slug }: CommentsProps) => {
                     setComments(comments2)
                 }
             })
-    }, [])
+    }, [updateComments2])
 
     return (
         <div>
