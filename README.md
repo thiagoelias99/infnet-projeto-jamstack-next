@@ -1,38 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+ <h1 align="center">Trazler</h1> 
 
-## Getting Started
+<p align="center">
+<img src="https://img.shields.io/badge/Next.js-Framework-000000?style=for-the-badge&logo=nextdotjs&logoColor=%23000000&color=%23000000"/>
+<img src="https://img.shields.io/static/v1?label=Vercel&message=deploy&color=black&style=for-the-badge&logo=vercel&logoColor=%23000000"/>
+<img src="https://img.shields.io/badge/typescript-linguagem-fff?style=for-the-badge&logo=typescript&logoColor=%233178C6&color=%233178C6"/>
+<img src="https://img.shields.io/badge/Tailwind-Estilo-fff?style=for-the-badge&logo=tailwindcss&logoColor=%2306B6D4&color=%2306B6D4"/>
+<img src="https://img.shields.io/badge/Zod-Valida%C3%A7%C3%A3o-fff?style=for-the-badge&logo=zod&logoColor=%233E67B1&color=%233E67B1"/>
+</p>
 
---legacy-peer-deps
- 
-First, run the development server:
+ ## Descrição do projeto 
 
+- Projeto desenvolvido com o framework [***Next.js***](https://nextjs.org/), utilizando [***React***](https://react.dev/) e [***TypeScript***](https://www.typescriptlang.org/) para a matéria de Frontend Jamstack com Next, da [***Pós-Graduação em Desenvolvimento Web Full Stack***](https://posgraduacao.infnet.edu.br/ead/pos-graduacao-desenvolvimento-web-full-stack/) da [***Infnet***](https://www.infnet.edu.br/infnet/home/).
+
+- O projeto consiste de um blog de destinos de viagem com nome fictício de [***Trazler***](https://infnet-projeto-jamstack-next.vercel.app/), com artigos escritos na liguagem de marcação [***.mdx***](https://mdxjs.com/), formulário para inscrição em lista de notificação (*fictícia*), área de login/cadastro e sistema de comentários em post para usuários autenticados.
+
+- Utiliza recursos do [***Google Firebase***](https://firebase.google.com) para cadastro | autenticação de usuários e [***Google Firestore***](https://firebase.google.com/docs/firestore) para armazenamento dos dados.
+
+- Layout responsivo criado com metodologia ***mobile-first*** utilizando [***TailwindCSS***](https://tailwindcss.com/)
+
+- Utiliza pipeline de deploy automático na [***Vercel***](https://vercel.com/) em conjunto com o [***GitHub***](https://github.com/)
+
+## Deploy da aplicação
+[Link Trazler na Vercel](https://infnet-projeto-jamstack-next.vercel.app/)
+
+## Teste de Performance do LightHouse
+<!-- ![resultado teste de performance](./assets/lighthouse-performance-test.png) -->
+<p align="center">
+<img src="./assets/lighthouse-performance-test.png" width="520px"/>
+</p>
+
+## Instalação do Projeto
+### Projeto desenvolvido com Next.js versão 14.
+
+### Requerimentos
+[Node.js](https://nodejs.org/en)
+
+### Instalação das dependências
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install --legacy-peer-deps
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Executar servidor de desenvolvimento
+```bash
+npm run dev 
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Executar build e iniciar servidor de produção
+```bash
+npm run build
+npm run serve 
+```
