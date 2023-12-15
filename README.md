@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/badge/Zod-Valida%C3%A7%C3%A3o-fff?style=for-the-badge&logo=zod&logoColor=%233E67B1&color=%233E67B1"/>
 </p>
 
- ## Descrição do projeto 
+ ## **Descrição do projeto**
 
 - Projeto desenvolvido com o framework [***Next.js***](https://nextjs.org/), utilizando [***React***](https://react.dev/) e [***TypeScript***](https://www.typescriptlang.org/) para a matéria de Frontend Jamstack com Next, da [***Pós-Graduação em Desenvolvimento Web Full Stack***](https://posgraduacao.infnet.edu.br/ead/pos-graduacao-desenvolvimento-web-full-stack/) da [***Infnet***](https://www.infnet.edu.br/infnet/home/).
 
@@ -20,32 +20,36 @@
 
 - Utiliza pipeline de deploy automático na [***Vercel***](https://vercel.com/) em conjunto com o [***GitHub***](https://github.com/)
 
-## Deploy da aplicação
+## **Deploy da aplicação**
 [Link Trazler na Vercel](https://infnet-projeto-jamstack-next.vercel.app/)
 
-## Teste de Performance do LightHouse
+## **Teste de Performance do LightHouse**
 <!-- ![resultado teste de performance](./assets/lighthouse-performance-test.png) -->
 <p align="center">
 <img src="./assets/lighthouse-performance-test.png" width="520px"/>
 </p>
 
-## Instalação do Projeto
-### Projeto desenvolvido com Next.js versão 14.
+## **Instalação do Projeto**
+### **Projeto desenvolvido com Next.js versão 14.**
 
-### Requerimentos
-[Node.js](https://nodejs.org/en)
+### **Requerimentos**
+- Instalação do [***Node.js***](https://nodejs.org/en)
+- Criar conta e projeto no [***Google Firebase***](https://firebase.google.com).
 
-### Instalação das dependências
+### **Instalação das dependências**
 ```bash
 npm install --legacy-peer-deps
 ```
 
-### Executar servidor de desenvolvimento
+### **Configuração das variáveis de ambiente**
+- Renomear o arquivo ***env.example*** para ***env.local*** e preencher as informações de conexão do firebase | JWT.
+
+### **Executar servidor de desenvolvimento**
 ```bash
 npm run dev 
 ```
 
-### Executar build e iniciar servidor de produção
+### **Executar build e iniciar servidor de produção**
 ```bash
 npm run build
 npm run serve 
