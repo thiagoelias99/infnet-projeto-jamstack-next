@@ -4,6 +4,7 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { MDXComponents } from 'mdx/types'
 import CommentInput from '@/components/Comment/Comment-Input'
 import Comments from '@/components/Comments'
+import { notFound } from 'next/navigation'
 
 const MyH1 = (props: React.HTMLProps<HTMLHeadingElement>) => (
     <h1
@@ -68,7 +69,14 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
 
 const PostLayout = ({ params }: { params: { slug: string } }) => {
     const post = allPosts.find((post) => post._raw.flattenedPath === params.slug)
-    const MDXContent = useMDXComponent(post?.body.code || "")
+    
+    let MDXContent = null
+    try {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        MDXContent = useMDXComponent(post?.body.code || "")
+    } catch (error) {
+        notFound()
+    }
 
     return (
         <main>
@@ -81,7 +89,7 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
                 />
             </div>
             <article className="w-screen max-w-[1024px] m-auto p-4">
-                <MDXContent components={mdxComponents} />
+                {MDXContent && <MDXContent components={mdxComponents} />}
             </article>
             <section className="w-screen max-w-[1024px] m-auto p-4">
                 <h2 className="text-black text-xl font-bold md:text-2xl lg:text-3xl mt-16 mb-4 p-4 text-center w-full bg-slate-100 rounded">Comentários</h2>
